@@ -1,0 +1,72 @@
+{
+  "name": "ai-code-mentor",
+  "displayName": "AI Code Mentor",
+  "description": "Real-time Python coding feedback using GPT-4 and static code analysis",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onCommand:ai-code-mentor.analyzeCode",
+    "onCommand:ai-code-mentor.getSuggestions"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ai-code-mentor.analyzeCode",
+        "title": "AI Code Mentor: Analyze Current File",
+        "category": "AI Code Mentor"
+      },
+      {
+        "command": "ai-code-mentor.getSuggestions",
+        "title": "AI Code Mentor: Get GPT-4 Suggestions",
+        "category": "AI Code Mentor"
+      }
+    ],
+    "configuration": {
+      "title": "AI Code Mentor",
+      "properties": {
+        "aiCodeMentor.openaiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API Key for GPT-4 access"
+        },
+        "aiCodeMentor.maxFunctionLines": {
+          "type": "number",
+          "default": 30,
+          "description": "Maximum lines allowed in a function before flagging"
+        },
+        "aiCodeMentor.maxNestedLoops": {
+          "type": "number",
+          "default": 3,
+          "description": "Maximum nested loops allowed before flagging"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "openai": "^4.0.0",
+    "axios": "^1.6.0"
+  }
+} 
