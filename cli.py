@@ -7,9 +7,35 @@ Use this to analyze Python code without VS Code
 import sys
 import json
 import argparse
+import os
 from models.analyzer import PythonAnalyzer
 import requests
-import os
+
+def colorize(text, color="green", use_colors=True):
+    """Colorize text using ANSI escape codes"""
+    if not use_colors:
+        return text
+    
+    colors = {
+        "green": "\033[32m",
+        "red": "\033[31m",
+        "yellow": "\033[33m",
+        "blue": "\033[34m",
+        "reset": "\033[0m"
+    }
+    return f"{colors.get(color, '')}{text}{colors['reset']}"
+
+def build_parser():
+    """Build and return the argument parser"""
+    parser = argparse.ArgumentParser(description='AI Code Mentor CLI - Analyze Python code')
+    parser.add_argument('file', help='Python file to analyze')
+    parser.add_argument('--api-key', help='OpenAI API key')
+    parser.add_argument('--gpt', action='store_true', help='Get GPT-4 suggestions')
+    parser.add_argument('--json', action='store_true', help='Output results as JSON')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
+    parser.add_argument('--color', choices=['auto', 'always', 'never'], default='auto', 
+                       help='Colorize output (default: auto)')
+    return parser
 
 class AICodeMentorCLI:
     def __init__(self, openai_api_key=None):
@@ -189,13 +215,15 @@ Please format your response as JSON with the following structure:
             print("```")
 
 def main():
-    parser = argparse.ArgumentParser(description='AI Code Mentor CLI - Analyze Python code')
-    parser.add_argument('file', help='Python file to analyze')
-    parser.add_argument('--api-key', help='OpenAI API key')
-    parser.add_argument('--gpt', action='store_true', help='Get GPT-4 suggestions')
-    parser.add_argument('--json', action='store_true', help='Output results as JSON')
-    
+    parser = build_parser()
     args = parser.parse_args()
+    
+    # Determine if we should use colors
+    use_colors = (args.color == 'always' or 
+                  (args.color == 'auto' and hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()))
+    
+    if args.verbose:
+        print(colorize("Verbose mode enabled", "green", use_colors))
     
     # Initialize CLI
     cli = AICodeMentorCLI(args.api_key)
