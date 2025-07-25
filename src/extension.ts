@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { PythonAnalyzer } from '../models/analyzer';
 import { GPTService } from './services/gptService';
 import { CodeAnalysisProvider } from './providers/codeAnalysisProvider';
 import { SidebarProvider } from './sidebar';
@@ -9,8 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Initialize services
     const gptService = new GPTService();
-    const analyzer = new PythonAnalyzer();
-    const analysisProvider = new CodeAnalysisProvider(analyzer, gptService);
+    const analysisProvider = new CodeAnalysisProvider(null, gptService);
 
     // Register commands
     const analyzeCommand = vscode.commands.registerCommand('ai-code-mentor.analyzeCode', async () => {
