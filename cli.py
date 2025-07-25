@@ -234,6 +234,15 @@ def main():
     if not analysis:
         sys.exit(1)
     
+    # Always output JSON summary to stdout after analysis completes
+    insights = []
+    if args.verbose:
+        insights.append("Flag --verbose on")
+    insights.append(f"Color mode: {args.color}")
+    
+    summary = {"insights": insights}
+    print(json.dumps(summary))
+    
     if args.json:
         # Output as JSON
         print(json.dumps(analysis, indent=2, default=lambda x: x.__dict__))

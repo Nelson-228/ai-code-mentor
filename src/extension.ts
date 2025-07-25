@@ -1,15 +1,14 @@
 import * as vscode from 'vscode';
-import { PythonAnalyzer } from '../models/analyzer';
 import { GPTService } from './services/gptService';
 import { CodeAnalysisProvider } from './providers/codeAnalysisProvider';
+import { SidebarProvider } from './sidebar';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('AI Code Mentor extension is now active!');
 
     // Initialize services
     const gptService = new GPTService();
-    const analyzer = new PythonAnalyzer();
-    const analysisProvider = new CodeAnalysisProvider(analyzer, gptService);
+    const analysisProvider = new CodeAnalysisProvider(null, gptService);
 
     // Register commands
     const analyzeCommand = vscode.commands.registerCommand('ai-code-mentor.analyzeCode', async () => {
@@ -50,8 +49,13 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    // Register sidebar toggle command
+    const sidebarCommand = vscode.commands.registerCommand('ai-code-mentor.toggleSidebar', () => {
+        SidebarProvider.createOrShow(context.extensionUri);
+    });
+
     // Register real-time analysis on document changes
-    const documentChangeListener = vscode.workspace.onDidChangeTextDocument(async (event) => {
+    const documentChangeListener = vscode.workspace.onDidChangeTextDocument(async (event: vscode.TextDocumentChangeEvent) => {
         if (event.document.languageId === 'python') {
             // Debounce rapid changes
             setTimeout(async () => {
@@ -70,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(analyzeCommand, suggestionsCommand, documentChangeListener);
+    context.subscriptions.push(analyzeCommand, suggestionsCommand, sidebarCommand, documentChangeListener);
 }
 
 async function showAnalysisResults(analysis: any) {
