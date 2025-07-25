@@ -15,19 +15,24 @@
     "onCommand:ai-code-mentor.getSuggestions"
   ],
   "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "ai-code-mentor.analyzeCode",
-        "title": "AI Code Mentor: Analyze Current File",
-        "category": "AI Code Mentor"
-      },
-      {
-        "command": "ai-code-mentor.getSuggestions",
-        "title": "AI Code Mentor: Get GPT-4 Suggestions",
-        "category": "AI Code Mentor"
-      }
-    ],
+      "contributes": {
+        "commands": [
+            {
+                "command": "ai-code-mentor.analyzeCode",
+                "title": "AI Code Mentor: Analyze Current File",
+                "category": "AI Code Mentor"
+            },
+            {
+                "command": "ai-code-mentor.getSuggestions",
+                "title": "AI Code Mentor: Get GPT-4 Suggestions",
+                "category": "AI Code Mentor"
+            },
+            {
+                "command": "ai-code-mentor.toggleSidebar",
+                "title": "AI Code Mentor: Toggle AI Insights Sidebar",
+                "category": "AI Code Mentor"
+            }
+        ],
     "configuration": {
       "title": "AI Code Mentor",
       "properties": {
